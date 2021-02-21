@@ -13,9 +13,6 @@
 
 int main()
 {
-    // Initialise all SDK-provided stdio drivers
-    stdio_init_all();
-
     // Set all pins high, to avoid chip selecting an incorrect device
     for (int pin = 0; pin < 29; pin++)
     {
@@ -23,12 +20,21 @@ int main()
         gpio_set_dir(pin, GPIO_OUT);
         gpio_put(pin, 1);
     }
+    
+    // Initialise all SDK-provided stdio drivers
+    stdio_init_all();
+
+    
 
     // Set up a display, FBConsole, and an stdio driver
     fb_setup();    
 
     // Test printf
     printf("Hello world!\n\n%s\nint: %i\thex: %X\n\nThe framebuffer console driver supports wrapping. Terminal emulation to come.\n\n", "The meaning of life:", 42, 42);
+
+    printf("Nope");
+    __breakpoint();
+    printf("\b\b\b\b    ");
 
     // Break, and halt execution
     __breakpoint();

@@ -44,24 +44,45 @@ void FBConsole<T>::put_char(char c)
     // Determine the character to draw
     uint16_t charindex = 0;
     bool drawchar = true;
+    int count;
 
-    if (c == '\n') {
-        drawchar = false;
-        console_x = 0;
-        console_y++;
-    }
-    else if (c == '\t') {
-        int count = _TABSTOP - ((console_x) % _TABSTOP);
+    // Handle special-case characters, or calculate the font index
+    switch (c)
+    {
+        case '\n':      // Line feed, handled unix-style
+            drawchar = false;
+            console_x = 0;
+            console_y++;
+            break;
+
+        case '\r':      // Carriage return
+            drawchar = false;
+            console_x = 0;
+            break;
+
+        case '\t':      // Tab
+            count = _TABSTOP - ((console_x) % _TABSTOP);
         
-        for (int i = 0; i < count; i++)
-            put_char(' ');
-        drawchar = false;
-    }
-    else if (c >= 0x20 || c <= 0x7E) {
-        charindex = (c - 0x20);
-    }
-    else {
-        charindex = 95;
+            for (int i = 0; i < count; i++)
+                put_char(' ');
+            drawchar = false;
+            break;
+
+        case '\b':      // Backspace
+            if (console_x > 0)
+                console_x--;
+            drawchar = false;
+            break;
+
+        // If character is none of the special cases above
+        default:
+            // Test if the character is mapped in the font
+            if (c >= 0x20 || c <= 0x7E)
+                charindex = (c - 0x20);
+            else
+                charindex = 95;     // font[95] contains the "invalid" glyph
+
+            break;
     }
     
     // Fill the character buffer
