@@ -21,4 +21,5 @@
     },
     "licenser.license": "BSD3",
     "licenser.projectName": "FBConsole",
+    "cmake.configureArgs": ["-DPICO_BOARD=vgaboard"],
 }
