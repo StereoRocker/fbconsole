@@ -12,6 +12,9 @@ set(PICO_SDK_PATH "/home/neggie/pico/pico-sdk")
 # Pull in Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
+# Also, add Pico Extras SDK
+include(pico_extras_import.cmake)
+
 project(fbconsole-test C CXX)
 
 # Initialise the Pico SDK
@@ -22,7 +25,7 @@ pico_sdk_init()
 add_executable(fbconsole-test
         main.cpp
         fb_setup.cpp
-        ili9341.cpp
+        vgafb.cpp
         FBConsole.cpp)
 
 pico_set_program_name(fbconsole-test "fbconsole-test")
@@ -36,7 +39,8 @@ target_link_libraries(fbconsole-test pico_stdlib)
 
 # Add any user requested libraries
 target_link_libraries(fbconsole-test
-        hardware_spi
+        pico_scanvideo_dpi
+        pico_multicore
         )
 
 pico_add_extra_outputs(fbconsole-test)

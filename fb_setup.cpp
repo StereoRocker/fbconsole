@@ -9,7 +9,7 @@
 #include "pico/stdio/driver.h"
 #include "pico/stdio.h"
 
-#include "ili9341.hpp"
+#include "vgafb.hpp"
 #include "gamefont.hpp"
 
 FBConsole<uint16_t> *fb;
@@ -46,12 +46,11 @@ stdio_driver_t stdio_fb = {
 #define PIN_DC   26
 #define PIN_RST  22
 
-ILI9341* display;
+VGAFB* display;
 
 void fb_setup()
 {
-    display = new ILI9341(SPI_PORT, PIN_MISO, PIN_MOSI, PIN_SCK,
-                            PIN_CS, PIN_DC, PIN_RST);
+    display = new VGAFB(&vga_mode_320x240_60);
 
     fb = new FBConsole<uint16_t>(display, (uint8_t*)&font);
 
